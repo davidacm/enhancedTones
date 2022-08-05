@@ -3,13 +3,17 @@
 # Copyright (C) 2022 David CM
 
 
-import config, math, nvwave, struct, threading, tones
+from audioop import add
+import addonHandler, config, math, nvwave, struct, threading, tones
 from itertools import cycle
 from NVDAHelper import generateBeep
 from ctypes import create_string_buffer
 
+addonHandler.initTranslation()
+
 class OrigTone:
-	name = "Tonos originales"
+	name = _("Native tone generator")
+	id = 'OrigTone'
 	def __init__(self, hz=None):
 		pass
 
@@ -20,7 +24,8 @@ class OrigTone:
 
 
 class ToneGenerator:
-	name = "tonos personalizados"
+	name = _("Custom tone generator")
+	id = 'ToneGenerator'
 	def __init__(self, rate=44100):
 		self.bytes = 2
 		self.maxAmplitude = int((2 ** (self.bytes * 8)) / 2) - 1
@@ -98,7 +103,6 @@ class PlayerTone(threading.Thread):
 		self.tonePlayer= None
 
 	def beep(self, hz,length,left, right):
-		print("tratando beeping")
 		self.values = (hz, length, left, right)
 		self.waitBeep.set()
 
@@ -126,4 +130,7 @@ def terminate():
 	toneThread.join()
 	toneThread = None
 
-availableGenerators = [OrigTone, ToneGenerator]
+availableToneGenerators = {
+	OrigTone.id: OrigTone,
+	ToneGenerator.id: ToneGenerator
+}

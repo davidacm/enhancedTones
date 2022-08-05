@@ -1,6 +1,6 @@
 # Enhanced tones NVDA Add-on #
 This add-on redefines the way of manage the beep tones in NVDA.
-To be in context. When NVDA beep a tone, do the following:
+To be in context. When NVDA beep a tone, it does the following:
 
 1. open a nvwave player.
 2. generate the tone.
@@ -10,14 +10,16 @@ To be in context. When NVDA beep a tone, do the following:
 This can be problematic in some sound cards, like high delays when playing the tones, or not playing the first tones at all.
 I had this issue in the past with one of my computers. So, that was the reason to create this add-on.
 
-If you try this add-on, even if you don't have issues with the original one, you can see that the tones are more fluid, overall in fastly repeated tones.
+If you try this add-on, even if you don't have issues with the original way of tone generation, you can see that the tones are more fluid, especially in fastly repeated tones.
 
 This add-on uses a thread to send the tones to the player, and the player is never closed.
-Also, this add-on implements a own tone generator, but you can use NVDA's tone generator if you want.
 
-I decided to keep my tone generator because some people liked it.
+Also, this add-on implements a custom tone generator, that is enabled by default. But you can change it to the NVDA's tones generator.
+My custom tone generator is written purely in Python. So, is less eficient than the NVDA tone generator, but the difference is not noticeable.
 
+I decided to mantain my tone generator because some people liked it, including myself. An user with hearing loss reported that he felt more comfortable with my tone generator.
 
+Note: Tone generation is not the same as the function to output the tones to your sound card. So even if you use NVDA's native tone generator, you will still see improvements.
 
 ## Download.
 	The latest release is available to
@@ -33,8 +35,8 @@ I decided to keep my tone generator because some people liked it.
   The add-on functionality will be enabled once you install it.  
   To enable or disable it, go to NVDA settings and select "Enhanced tones". In that category you can set the following parameters:
 
-* Enable enhanced tones.
-* select the tone generator that you prefer to use.
+* Enable this add-on. If disabled, the original function of NVDA will be used.
+* Library to generate tones:
 
 ## contributions, reports and donations
 

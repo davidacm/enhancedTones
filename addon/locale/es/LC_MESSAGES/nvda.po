@@ -1,0 +1,62 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the 'enhancedTones' package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 'enhancedTones' '1.1-dev'\n"
+"Report-Msgid-Bugs-To: 'nvda-translations@freelists.org'\n"
+"POT-Creation-Date: 2022-08-05 15:36-0600\n"
+"PO-Revision-Date: 2022-08-05 15:39-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1\n"
+
+#. Translators: This is the label for the enhanced tones  settings panel.
+#. Add-on summary, usually the user visible name of the addon.
+#. Translators: Summary for this add-on to be shown on installation and add-on information.
+#: addon\globalPlugins\enhancedTones\__init__.py:52 buildVars.py:17
+msgid "Enhanced tones"
+msgstr ""
+
+#: addon\globalPlugins\enhancedTones\__init__.py:60
+msgid ""
+"&Enable this add-on. If disabled, the original function of NVDA will be used"
+msgstr ""
+"&Habilitar el complemento. Si se deshabilita, la función original será usada "
+"en su lugar."
+
+#. Translators: This is the label for a combobox in the
+#. Enhanced tones settings panel.
+#: addon\globalPlugins\enhancedTones\__init__.py:66
+msgid "&Library to generate tones:"
+msgstr "Biblioteca para la generación de tonos"
+
+#: addon\globalPlugins\enhancedTones\_tones.py:15
+msgid "Native tone generator"
+msgstr "Generador de tonos nativo"
+
+#: addon\globalPlugins\enhancedTones\_tones.py:27
+msgid "Custom tone generator"
+msgstr "Generador de tonos personalizado"
+
+#. Add-on description
+#. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
+#: buildVars.py:20
+msgid ""
+"This add-on replaces the native tones library, this try to solve issues with "
+"some realtec and other drivers. Also, it adds another way of tone "
+"generation, so you can get a different sound when generating tones. You can "
+"configure it in the add-on settings"
+msgstr ""
+"Este complemento remplaza la función original de generación de tonos, para "
+"intentar resolver algunos problemas en algunos drivers de realtec. También "
+"añade una forma distinta de generar tonos, para obtener un sonido diferente. "
+"Puedes configurar la forma de generar tonos en las configuraciones del "
+"complemento."
