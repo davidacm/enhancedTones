@@ -94,7 +94,7 @@ class PlayerTone(threading.Thread):
 		self.values = None
 		self.waitBeep = threading.Event()
 		self.stopFlag = False
-		self.chunkSize = 4410
+		self.chunkSize = 8820
 		self.setToneGen(toneGen, hz)
 		self.setPlayer()
 
