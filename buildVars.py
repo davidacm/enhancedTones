@@ -19,7 +19,7 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description" : _("""This add-on replaces the native tones library, this try to solve issues with some realtec and other drivers. Also, it adds another way of tone generation, so you can get a different sound when generating tones. You can configure it in the add-on settings"""),
 	# version
-	"addon_version" : "1.1-dev",
+	"addon_version" : "1.2-dev",
 	# Author(s)
 	"addon_author" : u"David CM <dhf360@gmail.com>",
 	# URL for the add-on documentation support
