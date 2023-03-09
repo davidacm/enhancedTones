@@ -5,13 +5,13 @@ This add-on redefines the way of manage the beep tones in NVDA to do the process
 
 To be in context. When NVDA beep a tone, it does the following:
 
-1. opens a nvwave player.
-2. generates the waveform tone.
-3. sends the generated tone to the player.
-4. closes the player.
+1. import the generateBeep.
+2. stops the player.
+3. generates the waveform tone.
+4. sends the generated tone to the player.
 
-This can be problematic in some sound cards, like high delays when playing the tones, or not playing the first tones at all.
-I had this issue in the past with one of my computers. So, that was the reason to create this add-on.
+This can be problematic in some sound cards, like high delays when playing the tones, or not playing the first tones at all. Seems that the issue happen by stopping the player, especially when this is repeated quickly.
+I had this issue in the past with one of my computers. So, that was the reason to create this add-on. My add-on doesn't stop the player, and that fixed the issue.
 
 ## Description of the add-on beep process.
 
@@ -23,7 +23,7 @@ I had this issue in the past with one of my computers. So, that was the reason t
 6. If while sending the waveform to the player the lock is released, it means that a request for a new beep was received, then it stops sending the data and jumps to step number 3 to start handling the required new beep.
 7. If the entire waveform was sent to the player without interruption, it jumps to step number 2 to wait for another beep signal. Remember that the lock was blocked in step 4 so step 2 will be on hold again.
 
-By this way, the output player is always the same and the process is more efficient.
+By this way, the output player is never stopped and the process is more efficient.
 
 ## Notes about this add-on.
 

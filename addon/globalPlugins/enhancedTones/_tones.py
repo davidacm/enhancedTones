@@ -1,6 +1,6 @@
 # ● _tones
 # an utility to generate tones.
-# Copyright (C) 2022 David CM
+# Copyright (C) 2022 - 2023 David CM
 
 import addonHandler, config, math, nvwave, threading, tones
 from ctypes import c_short, create_string_buffer
@@ -19,18 +19,21 @@ class OrigTone:
 	def startGenerate(self, hz,length,left,right):
 		buf=create_string_buffer(generateBeep(None,hz,length,left,right))
 		generateBeep(buf,hz,length,left,right)
-		self.samples = buf.raw
-		self.curChunk = 0
+		self.samples = BytesIO(buf)
+		self.samples.size = len(buf)
 
-	def nextChunk(self, size):
-		numSamples = len(self.samples)
-		while self.curChunk < numSamples:
-			size = min(size, numSamples -self.curChunk)
-			if size <1:
+	def nextChunk(self, size=8820):
+		while True:
+			rest = self.samples.size -self.samples.tell()
+			# to avoid very small chunks at the end. Append the last part if is less than size*2
+			if rest < size*2:
+				size = rest
+			d = self.samples.read(size)
+			if d:
+				yield d
+			else:
 				return
-			samples = self.samples[self.curChunk:self.curChunk + size]
-			self.curChunk += size
-			yield samples
+
 
 class ToneGenerator:
 	name = _("Custom tone generator")
@@ -68,11 +71,12 @@ class ToneGenerator:
 		self.ampL = ampL
 		self.ampR = ampR
 
-	def nextChunk(self, size):
+	def nextChunk(self, size=4000):
 		while self.curChunk < self.numSamples:
-			size = min(size, self.numSamples -self.curChunk)
-			if size <1:
-				return
+			rest = self.numSamples -self.curChunk
+			# to avoid very small chunks at the end. Append the last part if is less than size*2
+			if rest < size*2:
+				size = rest
 			self.curChunk += size
 			samples = BytesIO()
 			for i in range(size):
@@ -94,7 +98,7 @@ class PlayerTone(threading.Thread):
 		self.values = None
 		self.waitBeep = threading.Event()
 		self.stopFlag = False
-		self.chunkSize = 8820
+		self.chunkSize = 2000
 		self.setToneGen(toneGen, hz)
 		self.setPlayer()
 
@@ -119,7 +123,7 @@ class PlayerTone(threading.Thread):
 			hz, length, left, right = self.values
 			self.waitBeep.clear()
 			self.toneGen.startGenerate(hz,length,left,right)
-			for data in self.toneGen.nextChunk(self.chunkSize):
+			for data in self.toneGen.nextChunk():
 				self.tonePlayer.feed(data)
 				if self.waitBeep.is_set():
 					break

@@ -6,13 +6,15 @@ Este complemento cambia la forma de gestionar los tonos en NVDA.
 
 Para estar en contexto. Cuando NVDA emite un tono, hace lo siguiente
 
-1. abre un reproductor nvwave.
-2. genera la forma de onda para el tono.
-3. envía el tono generado al reproductor.
-4. cierra el reproductor.
+1. importa generateBeep.
+2. detiene el reproductor.
+3. genera la forma de onda para el tono.
+4. envía el tono generado al reproductor.
 
-Esto puede ser problemático en algunas tarjetas de sonido, como altos retrasos al reproducir los tonos, o no reproducir los primeros tonos en absoluto.
-Yo tuve este problema en el pasado con uno de mis ordenadores. Así que esa fue la razón para crear este complemento.
+
+Esto puede ser problemático en algunas tarjetas de sonido, como altos retrasos al reproducir los tonos, o no reproducir los primeros tonos en absoluto. Parece que el problema ocurre al detener el reproductor, especialmente cuando esto se repite rápidamente.
+
+Yo tuve este problema en el pasado con uno de mis ordenadores. Así que esa fue la razón para crear este complemento. Mi complemento no detiene el reproductor, y eso arregló el problema.
 
 ## Descripción de la función "beep" del complemento.
 
@@ -24,7 +26,7 @@ Yo tuve este problema en el pasado con uno de mis ordenadores. Así que esa fue 
 6. Si mientras se envía la onda  al reproductor se libera el bloqueo, significa que se recibió una petición de un nuevo beep, entonces este deja de enviar los datos y salta al paso número 3 para emitir el nuevo beep requerido.
 7. Si toda la forma de onda fue enviada al reproductor sin interrupción, salta al paso número 2 para esperar otra señal de beep. Recuerde que el bloqueo se bloqueó en el paso 4 así que el paso 2 quedará en espera nuevamente.
 
-De esta manera, el reproductor de salida es siempre el mismo y el proceso es más eficiente.
+De esta manera, el reproductor de salida nunca es detenido y el proceso es más eficiente.
 
 ## Notas sobre este complemento.
 

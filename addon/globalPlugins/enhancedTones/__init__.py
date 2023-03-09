@@ -1,5 +1,5 @@
 # ● enhanced tones
-# Copyright (C) 2022 David CM
+# Copyright (C) 2022 - 2023 David CM
 import addonHandler, config, globalPluginHandler, wx
 from gui import guiHelper, settingsDialogs, SettingsPanel
 from ._tones import *
