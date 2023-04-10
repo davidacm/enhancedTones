@@ -14,11 +14,25 @@ confspec = {
 CONFIG_PATH = 'enhancedTones'
 config.conf.spec[CONFIG_PATH] = confspec
 
+origBeep = tones.beep
+def replaceBeepFunction():
+	try:
+		from tones import decide_beep as d
+		d.register(beep)
+	except:
+		tones.beep = beep
+
+def resetBeepFunction():
+	try:
+		from tones import decide_beep as d
+		d.unregister(beep)
+	except:
+		tones.beep = origBeep
+
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def __init__(self):
 		super(globalPluginHandler.GlobalPlugin, self).__init__()
-		self.origBeep = tones.beep
 		self.handleConfigProfileSwitch()
 		settingsDialogs.NVDASettingsDialog.categoryClasses.append(EnhancedTonesSettings)
 		config.post_configProfileSwitch.register(self.handleConfigProfileSwitch)
@@ -26,20 +40,20 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def setGenerator(self, toneGen):
 		terminate()
 		initialize(toneGen, 44100)
-		tones.beep=beep
 
 	def terminate(self):
 		super(GlobalPlugin, self).terminate()
 		self.disableAddon()
 
 	def disableAddon(self):
-		tones.beep = self.origBeep
+		resetBeepFunction()
 		terminate()
 
 	def handleConfigProfileSwitch(self):
 		if not config.conf[CONFIG_PATH]["enableAddon"]:
 			self.disableAddon()
 			return
+		replaceBeepFunction()
 		name = config.conf[CONFIG_PATH]["toneGenerator"]
 		if name in availableToneGenerators:
 			self.setGenerator(availableToneGenerators[name])

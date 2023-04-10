@@ -146,7 +146,13 @@ def initialize(toneGen, hz):
 	toneThread.start()
 
 
-def beep(hz,length,left=50,right=50):
+def beep(
+		hz: float,
+		length: int,
+		left: int = 50,
+		right: int = 50,
+		isSpeechBeepCommand: bool = False
+):
 	toneThread.beep(hz, length, left, right)
 
 
