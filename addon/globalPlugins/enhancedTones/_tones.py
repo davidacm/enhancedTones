@@ -1,6 +1,6 @@
 # ● _tones
 # an utility to generate tones.
-# Copyright (C) 2022 - 2023 David CM
+1# Copyright (C) 2022 David CM
 
 import addonHandler, config, math, nvwave, threading, tones
 from ctypes import c_short, create_string_buffer
@@ -8,6 +8,12 @@ from io import BytesIO
 from NVDAHelper import generateBeep
 
 addonHandler.initTranslation()
+
+
+availableToneGenerators = {}
+def registerGenerator(*generators):
+	for k in generators:
+		availableToneGenerators[k.id] = k
 
 
 class OrigTone:
@@ -35,58 +41,158 @@ class OrigTone:
 				return
 
 
-class ToneGenerator:
-	name = _("Custom tone generator")
-	id = 'ToneGenerator'
+class AbstractGenerator:
 	def __init__(self, rate=44100):
+		# parameters
 		self.bytes = 2
-		self.maxAmplitude = int(2 ** (self.bytes * 8) / 2) - 1
 		self.rate = rate
-		self.freq = 0
+		self.freq = 1000
+		# constants
+		self._MAX_AMPLITUDE = int(2 ** (self.bytes * 8) / 2) - 1
+		self._MAX_SWEEP = 500
+		# generator state
+		self.isGenerating = False
+		self._curFreq = 1000
+		self._gen = self.sampleGenerator()
+		self._stepFreq = 0
+		self._numSamples = 0
+		self._curChunk = 0
+		self._ampL = 0
+		self._ampR = 0
+		self._sweepCount = 0
 
-	def sine_wave(self, freq):
-		cs = float(2 *math.pi *freq /float(self.rate))
-		i=0
-		while True:
-			yield float(math.sin(cs *i))
-			i+=1
-			if i == self.rate:
-				i=0
+	def sampleGenerator(self):
+		""" this method is used to generate each sample according to the wave features.
+		it's a generator tat yields infinite wave samples following the waveform specs.
+		you must update the generation data if the _curFreq is updated.
+		the sample will be multiplied by the amplitude for each channel (left and right)
+		"""
+		raise NotImplementedError()
 
 	def normalizeSample(self, sample):
-		ret = int(sample * self.maxAmplitude)
-		if ret < -self.maxAmplitude:
-			ret = -self.maxAmplitude
-		elif ret > self.maxAmplitude:
-			ret = self.maxAmplitude
+		ret = int(sample * self._MAX_AMPLITUDE)
+		if ret < -self._MAX_AMPLITUDE:
+			ret = -self._MAX_AMPLITUDE
+		elif ret > self._MAX_AMPLITUDE:
+			ret = self._MAX_AMPLITUDE
 		return c_short(ret)
 
-	def setToneVals(self, freq, time, ampL=0.5, ampR=0.5):
-		self.numSamples = int(time *self.rate)
-		self.curChunk = 0
-		if freq != self.freq:
+	def setToneVals(self, freq, length, ampL=0.5, ampR=0.5):
+		self._numSamples = int(length *self.rate)
+		self._curChunk = 0
+		self._ampL = ampL
+		self._ampR = ampR
+		if not self.isGenerating:
 			self.freq = freq
-			self.gen = self.sine_wave(freq)
-		self.time = time
-		self.ampL = ampL
-		self.ampR = ampR
+			self._curFreq = freq
+			self._gen = self.sampleGenerator()
+		elif freq != self.freq:
+			self._sweepCount = min(self._MAX_SWEEP, self._numSamples)
+			self._stepFreq = ((freq -self._curFreq) / self._sweepCount)
+			self.freq = freq
 
 	def nextChunk(self, size=4000):
-		while self.curChunk < self.numSamples:
-			rest = self.numSamples -self.curChunk
+		while self._curChunk < self._numSamples:
+			self.isGenerating = True
+			rest = self._numSamples -self._curChunk
 			# to avoid very small chunks at the end. Append the last part if is less than size*2
 			if rest < size*2:
 				size = rest
-			self.curChunk += size
+			self._curChunk += size
 			samples = BytesIO()
 			for i in range(size):
-				w = next(self.gen)
-				samples.write(self.normalizeSample(self.ampL * w))
-				samples.write(self.normalizeSample(self.ampR * w))
+				w = next(self._gen)
+				if self._sweepCount > 0:
+					self._curFreq += self._stepFreq
+					self._sweepCount -= 1
+				else:
+					self._curFreq = self.freq
+				samples.write(self.normalizeSample(self._ampL * w))
+				samples.write(self.normalizeSample(self._ampR * w))
 			yield samples.getvalue()
+		self.isGenerating = False
 
 	def startGenerate(self, hz, length, left, right):
 		self.setToneVals(hz, length/1000.0, left/100.0, right/100.0)
+
+
+class SineGenerator(AbstractGenerator):
+	name = _("Sine Generator")
+	id = 'SineGenerator'
+	def __init__(self, rate=44100):
+		super().__init__(rate)
+		self._PHASE_BASE = float(2 *math.pi /self.rate)
+
+	def sampleGenerator(self):
+		freq = self._curFreq
+		phaseAcc = 0.0
+		delta = self._PHASE_BASE * freq
+		i=0
+		while True:
+			if i == self.rate:
+				i=0
+				phaseAcc = 0.0
+			if self._curFreq != freq:
+				freq = self._curFreq
+				delta = self._PHASE_BASE * freq
+			yield math.sin(phaseAcc)
+			phaseAcc += delta
+			i+=1
+
+# the following generators need improvements.
+
+class TriangleGenerator(AbstractGenerator):
+	name = _("Triangle Generator")
+	id = 'TriangleGenerator'
+
+	def sampleGenerator(self):
+		freq = self._curFreq
+		points = self.rate // freq
+		i=0
+		while True:
+			while i < points:
+				if self._curFreq != freq:
+					freq = self._curFreq
+					points = self.rate // freq
+				yield abs((2 *i /points) - 1)
+				i+=1
+			i = 0
+
+
+class SquareGenerator(AbstractGenerator):
+	name = _("Square Generator")
+	id = 'SquareGenerator'
+
+	def sampleGenerator(self):
+		freq = self._curFreq
+		points = self.rate // freq
+		i=0
+		while True:
+			while i < points:
+				if self._curFreq != freq:
+					freq = self._curFreq
+					points = self.rate // freq
+				yield 1 if i < points/2 else -1
+				i+=1
+			i = 0
+
+
+class SawtoothGenerator(AbstractGenerator):
+	name = _("Sawtooth Generator")
+	id = 'SawtoothGenerator'
+
+	def sampleGenerator(self):
+		freq = self._curFreq
+		points = self.rate // freq
+		i=0
+		while True:
+			while i < points:
+				if self._curFreq != freq:
+					freq = self._curFreq
+					points = self.rate // freq
+				yield (2 * i / points) - 1
+				i+=1
+			i = 0
 
 
 class PlayerTone(threading.Thread):
@@ -164,7 +270,4 @@ def terminate():
 	toneThread.join()
 	toneThread = None
 
-availableToneGenerators = {
-	OrigTone.id: OrigTone,
-	ToneGenerator.id: ToneGenerator
-}
+registerGenerator(OrigTone, SineGenerator, SawtoothGenerator, SquareGenerator, TriangleGenerator)

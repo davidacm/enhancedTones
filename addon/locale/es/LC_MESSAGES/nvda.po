@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 'enhancedTones' '1.1-dev'\n"
 "Report-Msgid-Bugs-To: 'nvda-translations@freelists.org'\n"
-"POT-Creation-Date: 2022-08-05 15:36-0600\n"
-"PO-Revision-Date: 2022-08-05 15:39-0600\n"
+"POT-Creation-Date: 2023-04-14 13:23-0600\n"
+"PO-Revision-Date: 2023-04-14 13:27-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,16 +16,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #. Translators: This is the label for the enhanced tones  settings panel.
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on to be shown on installation and add-on information.
-#: addon\globalPlugins\enhancedTones\__init__.py:52 buildVars.py:17
+#: addon\globalPlugins\enhancedTones\__init__.py:66 buildVars.py:17
 msgid "Enhanced tones"
 msgstr ""
 
-#: addon\globalPlugins\enhancedTones\__init__.py:60
+#: addon\globalPlugins\enhancedTones\__init__.py:74
 msgid ""
 "&Enable this add-on. If disabled, the original function of NVDA will be used"
 msgstr ""
@@ -34,17 +34,29 @@ msgstr ""
 
 #. Translators: This is the label for a combobox in the
 #. Enhanced tones settings panel.
-#: addon\globalPlugins\enhancedTones\__init__.py:66
-msgid "&Library to generate tones:"
-msgstr "Biblioteca para la generación de tonos"
+#: addon\globalPlugins\enhancedTones\__init__.py:80
+msgid "&Generator to produce tones:"
+msgstr "Generador para producir los tonos:"
 
-#: addon\globalPlugins\enhancedTones\_tones.py:15
+#: addon\globalPlugins\enhancedTones\_tones.py:20
 msgid "Native tone generator"
 msgstr "Generador de tonos nativo"
 
-#: addon\globalPlugins\enhancedTones\_tones.py:27
-msgid "Custom tone generator"
-msgstr "Generador de tonos personalizado"
+#: addon\globalPlugins\enhancedTones\_tones.py:120
+msgid "Sine Generator"
+msgstr "Generador de onda sinusoide "
+
+#: addon\globalPlugins\enhancedTones\_tones.py:145
+msgid "Triangle Generator"
+msgstr "Generador de ondas triangulares"
+
+#: addon\globalPlugins\enhancedTones\_tones.py:163
+msgid "Square Generator"
+msgstr "Generador de onda cuadrada"
+
+#: addon\globalPlugins\enhancedTones\_tones.py:181
+msgid "Sawtooth Generator"
+msgstr "Generador de diente de sierra"
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
@@ -60,3 +72,6 @@ msgstr ""
 "añade una forma distinta de generar tonos, para obtener un sonido diferente. "
 "Puedes configurar la forma de generar tonos en las configuraciones del "
 "complemento."
+
+#~ msgid "Custom tone generator"
+#~ msgstr "Generador de tonos personalizado"

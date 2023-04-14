@@ -9,7 +9,7 @@ addonHandler.initTranslation()
 
 confspec = {
 	"enableAddon": 'boolean(default=True)',
-	"toneGenerator": f'string(default="{ToneGenerator.id}")'
+	"toneGenerator": f'string(default="{SineGenerator.id}")'
 }
 CONFIG_PATH = 'enhancedTones'
 config.conf.spec[CONFIG_PATH] = confspec
@@ -77,10 +77,10 @@ class EnhancedTonesSettings(SettingsPanel):
 
 		# Translators: This is the label for a combobox in the
 		# Enhanced tones settings panel.
-		libraryLabel = _("&Library to generate tones:")
+		generatorLabel = _("&Generator to produce tones:")
 		self.lbs = sorted(availableToneGenerators.values(), key = lambda k: k.name)
 		choises = [k.name for k in self.lbs]
-		self.lbsList = sHelper.addLabeledControl(libraryLabel, wx.Choice, choices=choises)
+		self.lbsList = sHelper.addLabeledControl(generatorLabel, wx.Choice, choices=choises)
 		index = 0
 		for i, k in enumerate(self.lbs):
 			if config.conf[CONFIG_PATH]["toneGenerator"] == k.id:
