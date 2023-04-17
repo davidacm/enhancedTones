@@ -42,6 +42,8 @@ class OrigTone:
 
 
 class AbstractGenerator:
+	name = _("Sine Generator")
+	id = 'SineGenerator'
 	def __init__(self, rate=44100):
 		# parameters
 		self.bytes = 2
@@ -49,7 +51,7 @@ class AbstractGenerator:
 		self.freq = 1000
 		# constants
 		self._MAX_AMPLITUDE = int(2 ** (self.bytes * 8) / 2) - 1
-		self._MAX_SWEEP = 500
+		self._MAX_SWEEP = 1000
 		# generator state
 		self.isGenerating = False
 		self._curFreq = 1000
@@ -141,40 +143,30 @@ class SineGenerator(AbstractGenerator):
 
 # the following generators need improvements.
 
-class TriangleGenerator(AbstractGenerator):
-	name = _("Triangle Generator")
-	id = 'TriangleGenerator'
-
-	def sampleGenerator(self):
-		freq = self._curFreq
-		points = self.rate // freq
-		i=0
-		while True:
-			while i < points:
-				if self._curFreq != freq:
-					freq = self._curFreq
-					points = self.rate // freq
-				yield abs((2 *i /points) - 1)
-				i+=1
-			i = 0
-
-
 class SquareGenerator(AbstractGenerator):
 	name = _("Square Generator")
 	id = 'SquareGenerator'
 
 	def sampleGenerator(self):
-		freq = self._curFreq
-		points = self.rate // freq
-		i=0
+		freq = points = split = 0
+		def updateValues():
+			nonlocal freq, points, split
+			freq = self._curFreq
+			points = self.rate // freq
+			split = points / 2
+		updateValues()
 		while True:
+			i = 0
+			while i < split:
+				if self._curFreq != freq:
+					updateValues()
+				yield 1
+				i+=1
 			while i < points:
 				if self._curFreq != freq:
-					freq = self._curFreq
-					points = self.rate // freq
-				yield 1 if i < points/2 else -1
+					updateValues()
+				yield -1
 				i+=1
-			i = 0
 
 
 class SawtoothGenerator(AbstractGenerator):
@@ -182,17 +174,40 @@ class SawtoothGenerator(AbstractGenerator):
 	id = 'SawtoothGenerator'
 
 	def sampleGenerator(self):
-		freq = self._curFreq
-		points = self.rate // freq
-		i=0
+		freq = points = delta = 0
+		def updateValues():
+			nonlocal freq, points, delta
+			freq = self._curFreq
+			points = int(self.rate // freq)
+			delta = 2/points
+		updateValues()
 		while True:
+			i = 0
 			while i < points:
 				if self._curFreq != freq:
-					freq = self._curFreq
-					points = self.rate // freq
-				yield (2 * i / points) - 1
+					updateValues()
+				yield (delta*i) -1
 				i+=1
+
+class TriangleGenerator(AbstractGenerator):
+	name = _("Triangle Generator")
+	id = 'TriangleGenerator'
+
+	def sampleGenerator(self):
+		freq = points = delta = 0
+		def updateValues():
+			nonlocal freq, points, delta
+			freq = self._curFreq
+			points = int(self.rate // freq)
+			delta = 2/points
+		updateValues()
+		while True:
 			i = 0
+			while i < points:
+				if self._curFreq != freq:
+					updateValues()
+				yield abs((delta*i) -1)
+				i+=1
 
 
 class PlayerTone(threading.Thread):
@@ -211,7 +226,7 @@ class PlayerTone(threading.Thread):
 	def setPlayer(self, outputDevice=None):
 		if not outputDevice:
 			outputDevice = config.conf["speech"]["outputDevice"]
-		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice)
+		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice, wantDucking=False)
 
 	def setToneGen(self, toneGen, hz):
 		if toneGen == OrigTone:
