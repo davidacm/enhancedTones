@@ -1,6 +1,6 @@
 # ● _tones
 # an utility to generate tones.
-1# Copyright (C) 2022 David CM
+# Copyright (C) 2022 David CM
 
 import addonHandler, config, math, nvwave, threading, tones
 from ctypes import c_short, create_string_buffer
@@ -84,7 +84,7 @@ class AbstractGenerator:
 		self._curChunk = 0
 		self._ampL = ampL
 		self._ampR = ampR
-		if not self.isGenerating:
+		if not self.isGenerating or freq == 0:
 			self.freq = freq
 			self._curFreq = freq
 			self._gen = self.sampleGenerator()
