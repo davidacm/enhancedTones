@@ -14,9 +14,6 @@ If you are interested in creating your own wave generator and integrating it int
 
 The last two features allow for more pleasant sound when using features like sound mouse tracking.
 
-## Download.
- The latest release is available to [download in this link](https://davidacm.github.io/getlatest/gh/davidacm/enhancedTones)
-
 ## Initial idea of this add-on.
 
 This add-on was created to solve some issues with specific soundcards, those issues are less common now that we have better soundcard drivers. But some people reported that those issues are still present, like high delays when playing the tones, or not playing the first tones at all. Now, this add-on has more features, so this can be useful even if you don't have issues with the native tone generation. Try this yourself and see if it works for you.
@@ -58,7 +55,7 @@ Note: Tone generation is not the same as the function to output the tones to you
 
 ## Download.
 	The latest release is available to
-[download in this link](https://davidacm.github.io/getlatest/gh/davidacm/EnhancedTones)
+[download in this link](https://davidacm.github.io/getlatest/gh/davidacm/EnhancedTones/?index=1)
 
 ## Requirements
   You need NVDA 2018.3 or later.
