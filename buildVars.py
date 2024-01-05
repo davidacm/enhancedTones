@@ -19,7 +19,7 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description" : _("""This add-on replaces the native tones library, this try to solve issues with some realtec and other drivers. Also, it adds another way of tone generation, so you can get a different sound when generating tones. You can configure it in the add-on settings"""),
 	# version
-	"addon_version" : "1.2-dev",
+	"addon_version" : "24.1.1",
 	# Author(s)
 	"addon_author" : u"David CM <dhf360@gmail.com>",
 	# URL for the add-on documentation support
@@ -29,7 +29,7 @@ addon_info = {
 	# Minimum NVDA version supported (e.g. "2018.3.0")
 	"addon_minimumNVDAVersion" : "2018.3.0",
 	# Last NVDA version supported/tested (e.g. "2018.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion" : "2023.1",
+	"addon_lastTestedNVDAVersion" : "2024.2",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel" : None,
 	# Add-on license such as GPL 2

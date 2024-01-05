@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 'enhancedTones' '1.1-dev'\n"
-"Report-Msgid-Bugs-To: 'nvda-translations@freelists.org'\n"
-"POT-Creation-Date: 2023-04-14 13:23-0600\n"
-"PO-Revision-Date: 2023-04-17 17:21-0600\n"
+"Report-Msgid-Bugs-To: 'nvda-translations@groups.io'\n"
+"POT-Creation-Date: 2024-01-04 23:28-0600\n"
+"PO-Revision-Date: 2024-01-04 23:32-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,16 +16,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: addon\globalPlugins\enhancedTones\__init__.py:73
+msgid "&Not now"
+msgstr "&Ahora no"
+
+#: addon\globalPlugins\enhancedTones\__init__.py:84
+#, python-format
+msgid "Request for contributions to %s"
+msgstr "Solicitud de contribuciones para %s"
+
+#: addon\globalPlugins\enhancedTones\__init__.py:85
+msgid ""
+"Creating add-ons demands substantial time and effort. With limited job "
+"prospects in my country, your donations could significantly aid in "
+"dedicating more time to developing free plugins for the community.\n"
+"Your contribution would support the development of this and other free "
+"projects.\n"
+"Would you like to contribute to this cause? Select from our available "
+"payment methods below. You will be redirected to the corresponding website "
+"to complete your donation.\n"
+"Thank you for your support and generosity."
+msgstr ""
+"La creación de complementos exige mucho tiempo y esfuerzo. Con bajas "
+"oportunidades laborales en mi país, sus donaciones podrían ayudar "
+"significativamente a dedicar más tiempo al desarrollo de complementos "
+"gratuitos para la comunidad.\n"
+"Tu contribución apoyaría el desarrollo de este y otros proyectos gratuitos.\n"
+"¿Te gustaría contribuir a esta causa? Selecciona entre nuestros métodos de "
+"pago disponibles a continuación. Serás redirigido al sitio web "
+"correspondiente para completar tu donación.\n"
+"Gracias por tu apoyo y generosidad."
+
+#: addon\globalPlugins\enhancedTones\__init__.py:94
+msgid "Using Paypal"
+msgstr "Usando Paypal"
+
+#: addon\globalPlugins\enhancedTones\__init__.py:98
+msgid "using Co-fi"
+msgstr "usando co-fi"
+
+#: addon\globalPlugins\enhancedTones\__init__.py:102
+msgid "See more methods on my github Page"
+msgstr "Ver más métodos en mi página de github"
 
 #. Translators: This is the label for the enhanced tones  settings panel.
 #. Add-on summary, usually the user visible name of the addon.
 #. Translators: Summary for this add-on to be shown on installation and add-on information.
-#: addon\globalPlugins\enhancedTones\__init__.py:66 buildVars.py:17
+#: addon\globalPlugins\enhancedTones\__init__.py:110 buildVars.py:17
 msgid "Enhanced tones"
 msgstr ""
 
-#: addon\globalPlugins\enhancedTones\__init__.py:74
+#: addon\globalPlugins\enhancedTones\__init__.py:118
 msgid ""
 "&Enable this add-on. If disabled, the original function of NVDA will be used"
 msgstr ""
@@ -34,29 +77,34 @@ msgstr ""
 
 #. Translators: This is the label for a combobox in the
 #. Enhanced tones settings panel.
-#: addon\globalPlugins\enhancedTones\__init__.py:80
+#: addon\globalPlugins\enhancedTones\__init__.py:124
 msgid "&Generator to produce tones:"
 msgstr "Generador para producir los tonos:"
+
+#: addon\globalPlugins\enhancedTones\__init__.py:133
+msgid "&Support Enhanced tones add-on"
+msgstr "&Apoyar al complemento Enhanced tones"
 
 #: addon\globalPlugins\enhancedTones\_tones.py:20
 msgid "Native tone generator"
 msgstr "Generador de tonos nativo"
 
-#: addon\globalPlugins\enhancedTones\_tones.py:120
+#: addon\globalPlugins\enhancedTones\_tones.py:45
+#: addon\globalPlugins\enhancedTones\_tones.py:122
 msgid "Sine Generator"
 msgstr "Generador de onda sinusoide "
 
-#: addon\globalPlugins\enhancedTones\_tones.py:145
-msgid "Triangle Generator"
-msgstr "Generador de ondas triangulares"
-
-#: addon\globalPlugins\enhancedTones\_tones.py:163
+#: addon\globalPlugins\enhancedTones\_tones.py:147
 msgid "Square Generator"
 msgstr "Generador de onda cuadrada"
 
-#: addon\globalPlugins\enhancedTones\_tones.py:181
+#: addon\globalPlugins\enhancedTones\_tones.py:173
 msgid "Sawtooth Generator"
 msgstr "Generador de diente de sierra"
+
+#: addon\globalPlugins\enhancedTones\_tones.py:193
+msgid "Triangle Generator"
+msgstr "Generador de ondas triangulares"
 
 #. Add-on description
 #. Translators: Long description to be shown for this add-on on add-on information from add-ons manager
