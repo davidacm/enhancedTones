@@ -225,7 +225,7 @@ class PlayerTone(threading.Thread):
 
 	def setPlayer(self, outputDevice=None):
 		if not outputDevice:
-			outputDevice = config.conf["speech"]["outputDevice"]
+			outputDevice = config.conf["audio"]["outputDevice"]
 		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice, wantDucking=False)
 
 	def setToneGen(self, toneGen, hz):
