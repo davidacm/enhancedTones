@@ -2,12 +2,13 @@
 # an utility to generate tones.
 # Copyright (C) 2022 David CM
 
-import addonHandler, config, math, nvwave, threading, tones
+import addonHandler, config, math, nvwave, threading, tones, versionInfo
 from ctypes import c_short, create_string_buffer
 from io import BytesIO
 from NVDAHelper import generateBeep
 
 addonHandler.initTranslation()
+build_year=getattr(versionInfo,'version_year', 2025)
 
 
 availableToneGenerators = {}
@@ -225,7 +226,10 @@ class PlayerTone(threading.Thread):
 
 	def setPlayer(self, outputDevice=None):
 		if not outputDevice:
-			outputDevice = config.conf["speech"]["outputDevice"]
+			if build_year<2025:
+				outputDevice = config.conf["speech"]["outputDevice"]
+			else:
+				outputDevice = config.conf["audio"]["outputDevice"]
 		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice, wantDucking=False)
 
 	def setToneGen(self, toneGen, hz):
