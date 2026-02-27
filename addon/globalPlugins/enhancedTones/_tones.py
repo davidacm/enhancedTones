@@ -5,7 +5,10 @@
 import addonHandler, config, math, nvwave, threading, tones
 from ctypes import c_short, create_string_buffer
 from io import BytesIO
-from NVDAHelper import generateBeep
+try:
+	from NVDAHelper.localLib import generateBeep
+except ImportError:
+	from NVDAHelper import generateBeep
 
 addonHandler.initTranslation()
 
@@ -223,10 +226,26 @@ class PlayerTone(threading.Thread):
 		self.setToneGen(toneGen, hz)
 		self.setPlayer()
 
+	def _getConfigOutputDevice(self):
+		try:
+			return config.conf["audio"]["outputDevice"]
+		except KeyError:
+			return config.conf["speech"]["outputDevice"]
+
 	def setPlayer(self, outputDevice=None):
 		if not outputDevice:
-			outputDevice = config.conf["speech"]["outputDevice"]
-		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice, wantDucking=False)
+			outputDevice = self._getConfigOutputDevice()
+		self._currentOutputDevice = outputDevice
+		try:
+			self.tonePlayer = nvwave.WavePlayer(
+				2, self.hz, 16,
+				outputDevice=outputDevice,
+				wantDucking=False,
+				purpose=nvwave.AudioPurpose.SOUNDS,
+			)
+		except TypeError:
+			# Fallback for NVDA < 2025.1 which lacks the purpose parameter
+			self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice, wantDucking=False)
 
 	def setToneGen(self, toneGen, hz):
 		if toneGen == OrigTone:
@@ -243,6 +262,10 @@ class PlayerTone(threading.Thread):
 			if self.stopFlag: break
 			hz, length, left, right = self.values
 			self.waitBeep.clear()
+			configuredDevice = self._getConfigOutputDevice()
+			if configuredDevice != self._currentOutputDevice:
+				self.tonePlayer.close()
+				self.setPlayer(configuredDevice)
 			self.toneGen.startGenerate(hz,length,left,right)
 			for data in self.toneGen.nextChunk():
 				self.tonePlayer.feed(data)

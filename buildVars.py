@@ -19,17 +19,21 @@ addon_info = {
 	# Translators: Long description to be shown for this add-on on add-on information from add-ons manager
 	"addon_description" : _("""This add-on replaces the native tones library, this try to solve issues with some realtec and other drivers. Also, it adds another way of tone generation, so you can get a different sound when generating tones. You can configure it in the add-on settings"""),
 	# version
-	"addon_version" : "24.1.1",
+	"addon_version" : "26.1",
+	# Brief changelog for this version
+	# Translators: what's new content for the add-on version to be shown in the add-on store
+	"addon_changelog" : _("""Added compatibility for 2025/2026.x and later (for this channel, of course only 2025.3.3 and earlier is supported)
+Fixed a longstanding issue where tones would not switch to the new audio device when the device was changed until NVDA was restarted or plugins were reloaded"""),
 	# Author(s)
-	"addon_author" : u"David CM <dhf360@gmail.com>",
+	"addon_author" : u"Christopher Duffley <nvda@chrisduffley.com> along with Claude/Github Copilot, David CM <dhf360@gmail.com>",
 	# URL for the add-on documentation support
-	"addon_url" : "https://github.com/david-acm/enhancedTones",
+	"addon_url" : "https://github.com/ChrisDuffley/enhancedTones",
 	# Documentation file name
 	"addon_docFileName" : "readme.html",
 	# Minimum NVDA version supported (e.g. "2018.3.0")
 	"addon_minimumNVDAVersion" : "2018.3.0",
 	# Last NVDA version supported/tested (e.g. "2018.4.0", ideally more recent than minimum version)
-	"addon_lastTestedNVDAVersion" : "2024.2",
+	"addon_lastTestedNVDAVersion" : "2026.1",
 	# Add-on update channel (default is stable or None)
 	"addon_updateChannel" : None,
 	# Add-on license such as GPL 2
@@ -62,3 +66,11 @@ baseLanguage = "en"
 # Extensions string must be of the form "markdown.extensions.extensionName"
 # e.g. "markdown.extensions.tables" to add tables.
 markdownExtensions = []
+
+# Custom braille translation tables
+# If your add-on includes custom braille tables (most will not), fill out this dictionary.
+brailleTables = {}
+
+# Custom speech symbol dictionaries
+# If your add-on includes custom speech symbol dictionaries (most will not), fill out this dictionary.
+symbolDictionaries = {}
