@@ -1,7 +1,13 @@
 # ● enhanced tones
 # Copyright (C) 2022 - 2023 David CM
 import addonHandler, config, globalPluginHandler, os, wx
-from gui import guiHelper, settingsDialogs, nvdaControls
+from gui import guiHelper, settingsDialogs
+try:
+	from gui.message import MessageDialog as _NVDAMessageDialog, DialogType as _DialogType
+	_HAS_NEW_MESSAGE_DIALOG = True
+except ImportError:
+	from gui import nvdaControls
+	_HAS_NEW_MESSAGE_DIALOG = False
 from ._tones import *
 
 addonHandler.initTranslation()
@@ -61,23 +67,50 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 			self.setGenerator(OrigTone)
 
 
-class DonationDialog(nvdaControls.MessageDialog):
-	def __init__(self, parent, title, message, donateOptions):
-		self.donateOptions = donateOptions
-		super().__init__(parent, title, message, dialogType=nvdaControls.MessageDialog.DIALOG_TYPE_WARNING)
+if _HAS_NEW_MESSAGE_DIALOG:
+	class DonationDialog(wx.Dialog):
+		def __init__(self, parent, title, message, donateOptions):
+			super().__init__(parent, title=title, style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER)
+			self.donateOptions = donateOptions
+			sizer = wx.BoxSizer(wx.VERTICAL)
+			text = wx.StaticText(self, label=message)
+			text.Wrap(400)
+			sizer.Add(text, 0, wx.ALL | wx.EXPAND, 10)
+			btnSizer = wx.BoxSizer(wx.VERTICAL)
+			for k in donateOptions:
+				btn = wx.Button(self, label=k['label'], name=k['url'])
+				btn.Bind(wx.EVT_BUTTON, self.onDonate)
+				btnSizer.Add(btn, 0, wx.ALL | wx.EXPAND, 3)
+			cancelBtn = wx.Button(self, id=wx.ID_CANCEL, label=_("&Not now"))
+			cancelBtn.Bind(wx.EVT_BUTTON, lambda evt: self.EndModal(wx.CANCEL))
+			btnSizer.Add(cancelBtn, 0, wx.ALL | wx.CENTER, 3)
+			sizer.Add(btnSizer, 0, wx.ALL | wx.CENTER, 10)
+			self.SetSizerAndFit(sizer)
+			self.CenterOnParent()
 
-	def _addButtons(self, buttonHelper):
-		for k in self.donateOptions:
-			btn = buttonHelper.addButton(self, label=k['label'], name=k['url'])
-			btn.Bind(wx.EVT_BUTTON, self.onDonate)
-		cancelBtn = buttonHelper.addButton(self, id=wx.ID_CANCEL, label=_("&Not now"))
-		cancelBtn.Bind(wx.EVT_BUTTON, lambda evt: self.EndModal(wx.CANCEL))
+		def onDonate(self, evt):
+			donateBtn = evt.GetEventObject()
+			donateUrl = donateBtn.Name
+			os.startfile(donateUrl)
+			self.EndModal(wx.OK)
+else:
+	class DonationDialog(nvdaControls.MessageDialog):
+		def __init__(self, parent, title, message, donateOptions):
+			self.donateOptions = donateOptions
+			super().__init__(parent, title, message, dialogType=nvdaControls.MessageDialog.DIALOG_TYPE_WARNING)
 
-	def onDonate(self, evt):
-		donateBtn = evt.GetEventObject()
-		donateUrl = donateBtn.Name
-		os.startfile(donateUrl)
-		self.EndModal(wx.OK)
+		def _addButtons(self, buttonHelper):
+			for k in self.donateOptions:
+				btn = buttonHelper.addButton(self, label=k['label'], name=k['url'])
+				btn.Bind(wx.EVT_BUTTON, self.onDonate)
+			cancelBtn = buttonHelper.addButton(self, id=wx.ID_CANCEL, label=_("&Not now"))
+			cancelBtn.Bind(wx.EVT_BUTTON, lambda evt: self.EndModal(wx.CANCEL))
+
+		def onDonate(self, evt):
+			donateBtn = evt.GetEventObject()
+			donateUrl = donateBtn.Name
+			os.startfile(donateUrl)
+			self.EndModal(wx.OK)
 
 
 def showDonationsDialog(parentWindow, addonName, donateOptions):
