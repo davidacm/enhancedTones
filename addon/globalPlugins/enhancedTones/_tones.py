@@ -226,12 +226,16 @@ class PlayerTone(threading.Thread):
 		self.setToneGen(toneGen, hz)
 		self.setPlayer()
 
+	def _getConfigOutputDevice(self):
+		try:
+			return config.conf["audio"]["outputDevice"]
+		except KeyError:
+			return config.conf["speech"]["outputDevice"]
+
 	def setPlayer(self, outputDevice=None):
 		if not outputDevice:
-			try:
-				outputDevice = config.conf["audio"]["outputDevice"]
-			except KeyError:
-				outputDevice = config.conf["speech"]["outputDevice"]
+			outputDevice = self._getConfigOutputDevice()
+		self._currentOutputDevice = outputDevice
 		try:
 			self.tonePlayer = nvwave.WavePlayer(
 				2, self.hz, 16,
@@ -258,6 +262,10 @@ class PlayerTone(threading.Thread):
 			if self.stopFlag: break
 			hz, length, left, right = self.values
 			self.waitBeep.clear()
+			configuredDevice = self._getConfigOutputDevice()
+			if configuredDevice != self._currentOutputDevice:
+				self.tonePlayer.close()
+				self.setPlayer(configuredDevice)
 			self.toneGen.startGenerate(hz,length,left,right)
 			for data in self.toneGen.nextChunk():
 				self.tonePlayer.feed(data)
