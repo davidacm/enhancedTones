@@ -20,6 +20,11 @@ addon_info = {
 	"addon_description" : _("""This add-on replaces the native tones library, this try to solve issues with some realtec and other drivers. Also, it adds another way of tone generation, so you can get a different sound when generating tones. You can configure it in the add-on settings"""),
 	# version
 	"addon_version" : "24.1.1",
+	# Brief changelog for this version
+	# Translators: what's new content for the add-on version to be shown in the add-on store
+	"addon_changelog" : _("""Updated support for NVDA 2024.2.
+Updated spanish locale strings.
+Added donation options to support the author."""),
 	# Author(s)
 	"addon_author" : u"David CM <dhf360@gmail.com>",
 	# URL for the add-on documentation support
@@ -62,3 +67,11 @@ baseLanguage = "en"
 # Extensions string must be of the form "markdown.extensions.extensionName"
 # e.g. "markdown.extensions.tables" to add tables.
 markdownExtensions = []
+
+# Custom braille translation tables
+# If your add-on includes custom braille tables (most will not), fill out this dictionary.
+brailleTables = {}
+
+# Custom speech symbol dictionaries
+# If your add-on includes custom speech symbol dictionaries (most will not), fill out this dictionary.
+symbolDictionaries = {}
