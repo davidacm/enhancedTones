@@ -7,7 +7,7 @@ version = sys.argv[1]
 print(f"the version recognized is: {version}")
 with open("buildVars.py", 'r+', encoding='utf-8') as f:
 	text = f.read()
-	text = re.sub('"addon_version" *:.*,', f'"addon_version" : "{version}",', text)
+	text = re.sub('version *=.*', f'version = {version}', text, count=1)
 	f.seek(0)
 	f.write(text)
 	f.truncate()

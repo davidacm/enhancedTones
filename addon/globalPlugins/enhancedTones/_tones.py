@@ -5,7 +5,10 @@
 import addonHandler, config, math, nvwave, threading, tones
 from ctypes import c_short, create_string_buffer
 from io import BytesIO
-from NVDAHelper import generateBeep
+try:
+	from NVDAHelper.localLib import generateBeep
+except ImportError:
+	from NVDAHelper import generateBeep
 
 addonHandler.initTranslation()
 
@@ -224,9 +227,9 @@ class PlayerTone(threading.Thread):
 		self.setPlayer()
 
 	def setPlayer(self, outputDevice=None):
-		if not outputDevice:
-			outputDevice = config.conf["speech"]["outputDevice"]
-		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, outputDevice=outputDevice, wantDucking=False)
+		"""if not outputDevice:
+			outputDevice = config.conf["speech"]["outputDevice"]"""
+		self.tonePlayer = nvwave.WavePlayer(2, self.hz, 16, wantDucking=False)
 
 	def setToneGen(self, toneGen, hz):
 		if toneGen == OrigTone:
