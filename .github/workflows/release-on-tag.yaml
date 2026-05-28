@@ -43,7 +43,7 @@ jobs:
         run: awk '/^# / && !flag {flag=1; next} /^# / && flag {exit} flag && NF' changelog.md > newChanges.md
       - name: Calculate sha256
         run: sha256sum *.nvda-addon >> newChanges.md
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: packaged_addon
           path: |
